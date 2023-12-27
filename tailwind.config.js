@@ -12,9 +12,14 @@ module.exports = {
     colors:{
       background : "#131619",
       card_background : "#0d0f10",
-      hoverCard : "#686b6e",
+      hoverCard : "#686B6E44",
       typography : "#cdcecf",
-      active_green:"#b6f09c",
+      active_green:"#9ad37f",
+      red : "#d0302f",
+      orange : "#e26f20",
+      blue : "#82dbf7",
+      purple : "#7c35f1",
+      yellow : "#ffd147"
     },
     container: {
       center: true,
