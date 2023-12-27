@@ -9,6 +9,13 @@ module.exports = {
   ],
   prefix: "",
   theme: {
+    colors:{
+      background : "#131619",
+      card_background : "#0d0f10",
+      hoverCard : "#686b6e",
+      typography : "#cdcecf",
+      active_green:"#b6f09c",
+    },
     container: {
       center: true,
       padding: "2rem",
