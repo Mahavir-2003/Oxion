@@ -31,19 +31,19 @@ const DashboardLayout = ({ children }: {
 
   return (
     <div className='p-5 h-full relative w-full flex gap-x-3 text-typography  justify-end' >
-      <div className='hidden md:block text-typography'>
+      <div className='hidden lg:block text-typography'>
       <Sidebar />
       </div>
       <div className='w-full h-full flex flex-col gap-y-3'>
-        <div className='w-full bg-card_background rounded-xl py-3 px-5 border-[#E8E9E911] border flex justify-between md:justify-center items-center'>
-          <div className=' block md:hidden '>
+        <div className='w-full bg-card_background rounded-xl py-3 px-5 border-[#E8E9E911] border flex justify-between lg:justify-center items-center'>
+          <div className=' block lg:hidden '>
             <MobileSidebar />
           </div>
           <div className='flex flex-col justify-center items-center'>
             <p className='text-xl text-[#fff] tracking-wide mb-1'>{page.title}</p>
-            <p className='hidden md:block text-sm text-[#ffffff88] font-extralight'>{page.description}</p>
+            <p className='hidden lg:block text-sm text-[#ffffff88] font-extralight'>{page.description}</p>
           </div>
-          <div className='block md:hidden'>
+          <div className='block lg:hidden'>
             <UserButton afterSignOutUrl='/' />
           </div>
         </div>
