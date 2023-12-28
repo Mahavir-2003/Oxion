@@ -5,44 +5,58 @@ const routes =[
       label : "Dashboard",
       icon : LayoutDashboard,
       href : "/dashboard",
-      color : "text-active_green",
-      info : "Welcome to your Dashboard"
+      color : "green",
+      bgColor : "bg-green/20",
+      info : "Chat with the Smartest AI - Experience the power of AI",
+      isDashboardVisible : false
     },{
       label : "Conversation",
       icon : MessagesSquare,
       href : "/conversation",
-      color : "text-blue",
-      info : "Welcome to the most advanced AI Conversation"
+      color : "blue",
+      bgColor : "bg-blue/20",
+      info : "Welcome to the most advanced AI Conversation",
+      isDashboardVisible : true
     },{
       label : "Image Genration",
       icon : ImageIcon,
       href : "/image",
-      color : "text-red",
-      info : "Welcome to the most advanced AI Image Genration"
+      color : "red",
+      bgColor : "bg-red/20",
+      info : "Welcome to the most advanced AI Image Genration",
+      isDashboardVisible : true
     },{
       label : "Video Genration",
       icon : VideoIcon,
       href : "/video",
-      color : "text-orange",
-      info : "Welcome to the most advanced AI Video Genration"
+      color : "orange",
+      bgColor : "bg-orange/20",
+      info : "Welcome to the most advanced AI Video Genration",
+      isDashboardVisible : true
     },{
       label : "Music Genration",
       icon : Music,
       href : "/music",
-      color : "text-yellow",
-      info : "Welcome to the most advanced AI Music Genration"
+      color : "yellow",
+      bgColor : "bg-yellow/20",
+      info : "Welcome to the most advanced AI Music Genration",
+      isDashboardVisible : true
     },{
       label : "Code Genration",
       icon : Code,
       href : "/code",
-      color : "text-purple",
-      info : "Welcome to the most advanced AI Code Genration"
+      color : "purple",
+      bgColor : "bg-purple/20",
+      info : "Welcome to the most advanced AI Code Genration",
+      isDashboardVisible : true
     },{
       label : "Settings",
       icon : Settings,
       href : "/settings",
-      color : "text-white",
-      info : "Welcome to the Settings"
+      color : "white",
+      bgColor : "bg-white/20",
+      info : "Welcome to the Settings",
+      isDashboardVisible : false
     }
   ]
 

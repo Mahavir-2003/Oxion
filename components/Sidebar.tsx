@@ -30,12 +30,12 @@ const Sidebar = () => {
               <Link 
               href={route.href}
               key={route.href}
-              className={cn("hover:cursor-pointer hover:bg-hoverCard tracking-wide text-typography  p-3 rounded-md",
-               pathname === route.href ? "bg-hoverCard text-[#fff]" : ""
+              className={cn("hover:cursor-pointer hover:bg-hoverCard/15 tracking-wide text-typography  p-3 rounded-md",
+               pathname === route.href ? "bg-hoverCard/15 text-[#fff]" : ""
               )}
               >
                 <div className='flex gap-x-2 justify-start items-center'>
-                  <route.icon className={cn(route.color)}/>
+                  <route.icon color={route.color}/>
                   <p>{route.label}</p>
                 </div>
               </Link>
@@ -45,7 +45,7 @@ const Sidebar = () => {
               <UserButton afterSignOutUrl='/'/>
               <div>
                 <p className='text-lg tracking-wide leading-6 font-medium'>Mahavir Patel</p>
-                <p className=' text-active_green tracking-wide'>Premium</p>
+                <p className=' text-green tracking-wide'>Premium</p>
               </div>
           </div>
       </nav>
