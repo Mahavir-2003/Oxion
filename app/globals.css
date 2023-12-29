@@ -12,6 +12,10 @@ body{
   background-color: #131619;
 }
 
+.scrollable-view::-webkit-scrollbar{
+  display: none;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

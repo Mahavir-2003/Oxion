@@ -30,11 +30,11 @@ const DashboardLayout = ({ children }: {
   }, [pathname])
 
   return (
-    <div className='p-5 h-full relative w-full flex gap-x-3 text-typography  justify-end' >
+    <div className='p-5   h-screen relative w-full flex gap-x-3 text-typography  justify-end' >
       <div className='hidden lg:block text-typography'>
       <Sidebar />
       </div>
-      <div className='w-full h-full flex flex-col gap-y-3'>
+      <div className='w-full  flex flex-col gap-y-3 h-full '>
         <div className='w-full bg-card_background rounded-xl py-3 px-5 border-[#E8E9E911] border flex justify-between lg:justify-center items-center'>
           <div className=' block lg:hidden '>
             <MobileSidebar />
@@ -47,8 +47,8 @@ const DashboardLayout = ({ children }: {
             <UserButton afterSignOutUrl='/' />
           </div>
         </div>
-        <div className='w-full flex-1'>
-          <main  className='w-full h-full'>
+        <div className='w-full h-full flex-1'>
+          <main  className='w-full h-full flex '>
             {children}
           </main>
         </div>
