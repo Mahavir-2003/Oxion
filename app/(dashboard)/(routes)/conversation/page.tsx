@@ -1,6 +1,8 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import ReactMarkdown from "react-markdown"
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
 import { formSchema } from './constants'
@@ -20,6 +22,7 @@ type ChatCompletionRequestMessage = {
   role: 'system' | "user" | "assistant",
   content: String,
 }
+
 
 const ConversationPage = () => {
 
@@ -93,17 +96,43 @@ const ConversationPage = () => {
             <div className='flex flex-col gap-y-2 justify-start items-start'>
               <p className=' text-lg font-bold tracking-wide '>{message.role === "user" ? "You" : "Oxion"}</p>
               <ReactMarkdown
-              components={{
-                pre : ({node , ...props})=>(
-                  <div className='code-scrollbar bg-card_background p-4 overflow-auto lg:w-2/3 w-full rounded-md border border-typography/10 my-4'>
-                    <pre {...props}/>
-                  </div>
-                ),
-                code : ({node, ...props})=>(
-                  <code className=' p-1 rounded-sm bg-hoverCard' {...props}/>
-                )
-              }}
-              >{message.content as string || ""}</ReactMarkdown>
+  components={{
+    pre: ({ node, children }) => (
+      <SyntaxHighlighter
+        style={atomDark}
+        customStyle={{
+          margin: 0,
+          borderRadius: '0.375rem',
+        }}
+      >
+        {children?.props.children}
+      </SyntaxHighlighter>
+    ),
+    code: ({ node, inline, className, children, ...props }) => {
+      const match = /language-(\w+)/.exec(className || '');
+      return !inline && match ? (
+        <SyntaxHighlighter
+          style={atomDark}
+          language={match[1]}
+          PreTag="div"
+          customStyle={{
+            margin: 0,
+            borderRadius: '0.375rem',
+          }}
+          {...props}
+        >
+          {String(children).replace(/\n$/, '')}
+        </SyntaxHighlighter>
+      ) : (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      );
+    },
+  }}
+>
+  {message.content as string || ''}
+</ReactMarkdown>
             </div>
           </div>
         ))}
