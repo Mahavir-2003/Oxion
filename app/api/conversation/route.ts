@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs"
 import axios from "axios";
+import { Content } from "next/font/google";
 import { NextResponse } from "next/server";
 const configuration = {
     apiKey : process.env.PAWAN_API_KEY,
@@ -40,9 +41,7 @@ export async function POST(
         const response = await axios.post(apiUrl, {
           "model": "pai-001-light",
           "max_tokens": 3000,
-          "messages": [
-              ...messages
-          ]
+          "messages": [...messages]
       }, { headers });
 
       console.log("request Completed")

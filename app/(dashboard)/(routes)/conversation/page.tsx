@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import ReactMarkdown from "react-markdown"
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
 import { formSchema } from './constants'
@@ -69,9 +70,10 @@ const ConversationPage = () => {
         role : 'assistant',
         content : "Some Error Occured re-prompt please"
       }]);
-      await setIsThinking(false)
+      
     } finally {
       router.refresh();
+      await setIsThinking(false)
     }
   };
 
@@ -90,7 +92,18 @@ const ConversationPage = () => {
             </div>
             <div className='flex flex-col gap-y-2 justify-start items-start'>
               <p className=' text-lg font-bold tracking-wide '>{message.role === "user" ? "You" : "Oxion"}</p>
-              <p className=' text-lg font-mono tracking-wide'>{message.content}</p>
+              <ReactMarkdown
+              components={{
+                pre : ({node , ...props})=>(
+                  <div className='code-scrollbar bg-card_background p-4 overflow-auto lg:w-2/3 w-full rounded-md border border-typography/10 my-4'>
+                    <pre {...props}/>
+                  </div>
+                ),
+                code : ({node, ...props})=>(
+                  <code className=' p-1 rounded-sm bg-hoverCard' {...props}/>
+                )
+              }}
+              >{message.content as string || ""}</ReactMarkdown>
             </div>
           </div>
         ))}
