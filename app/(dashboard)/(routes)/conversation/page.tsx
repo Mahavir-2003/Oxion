@@ -1,8 +1,6 @@
 "use client"
-import React, { ReactNode, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactMarkdown from "react-markdown"
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
 import { formSchema } from './constants'
@@ -16,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 
 type ChatCompletionRequestMessage = {
@@ -23,13 +22,12 @@ type ChatCompletionRequestMessage = {
   content: String,
 }
 
-
 const ConversationPage = () => {
 
   const { user } = useUser();
   const router = useRouter();
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
-  const [isThinking , setIsThinking] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
 
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,10 +68,10 @@ const ConversationPage = () => {
       console.log("Something Error Occurred while requesting Conversation");
       console.log(err);
       await setMessages((current) => [...current, {
-        role : 'assistant',
-        content : "Some Error Occured re-prompt please"
+        role: 'assistant',
+        content: "Some Error Occured re-prompt please"
       }]);
-      
+
     } finally {
       router.refresh();
       await setIsThinking(false)
@@ -81,58 +79,31 @@ const ConversationPage = () => {
   };
 
 
-
   return (
     <div className='flex w-full flex-col gap-y-2 justify-center items-center'>
-      <div className='scrollable-view flex-1 overflow-auto max-h-[80vh] w-[80%] flex flex-col gap-y-10 py-6'>
-      {messages.map((message) => (
+      <div className='scrollable-view flex-1 overflow-auto max-h-[80vh] lg:w-[80%] w-full flex flex-col gap-y-10 py-6'>
+        {messages.map((message) => (
           <div key={message.content as React.Key} className='flex gap-x-4'>
             <div>
-              <Avatar>
+              <Avatar className=' w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'>
                 <AvatarImage src={message.role === "user" ? user?.imageUrl : "https://t3.ftcdn.net/jpg/05/32/45/50/360_F_532455018_lBtlVzG948BTkJuPNqnDpxfLOMWHq062.jpg"} alt='UserImage' />
                 <AvatarFallback>{user?.firstName?.split('')[0]}</AvatarFallback>
               </Avatar>
             </div>
-            <div className='flex flex-col gap-y-2 justify-start items-start'>
+            <div className='flex flex-col gap-y-2 justify-start items-star overflow-auto overflow-x-hidden'>
               <p className=' text-lg font-bold tracking-wide '>{message.role === "user" ? "You" : "Oxion"}</p>
               <ReactMarkdown
-  components={{
-    pre: ({ node, children }) => (
-      <SyntaxHighlighter
-        style={atomDark}
-        customStyle={{
-          margin: 0,
-          borderRadius: '0.375rem',
-        }}
-      >
-        {children?.props.children}
-      </SyntaxHighlighter>
-    ),
-    code: ({ node, inline, className, children, ...props }) => {
-      const match = /language-(\w+)/.exec(className || '');
-      return !inline && match ? (
-        <SyntaxHighlighter
-          style={atomDark}
-          language={match[1]}
-          PreTag="div"
-          customStyle={{
-            margin: 0,
-            borderRadius: '0.375rem',
-          }}
-          {...props}
-        >
-          {String(children).replace(/\n$/, '')}
-        </SyntaxHighlighter>
-      ) : (
-        <code className={className} {...props}>
-          {children}
-        </code>
-      );
-    },
-  }}
->
-  {message.content as string || ''}
-</ReactMarkdown>
+                components={{
+                  pre: ({ node, ...props }) => (
+                    <div className='code-scrollbar bg-card_background p-4 overflow-auto lg:w-2/3 w-full rounded-md border border-typography/10 my-4'>
+                      <pre {...props} />
+                    </div>
+                  ),
+                  code: ({ node, ...props }) => (
+                    <code className=' p-1 rounded-sm bg-hoverCard' {...props} />
+                  )
+                }}
+              >{message.content as string || ""}</ReactMarkdown>
             </div>
           </div>
         ))}
