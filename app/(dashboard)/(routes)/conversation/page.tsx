@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import ReactMarkdown from "react-markdown"
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
 
 
 type ChatCompletionRequestMessage = {
