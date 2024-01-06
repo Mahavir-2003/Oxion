@@ -40,7 +40,7 @@ export async function GET(
     });
 
   } catch (err) {
-    console.log("IMAGE : lafda hua hai")
+    console.log("IMAGE : lafda hua hai",err)
     return new NextResponse("Currently Unavailaible to Respond", {
       status: 500,
       statusText: "ERROR",
