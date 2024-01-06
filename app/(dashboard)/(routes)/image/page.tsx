@@ -23,7 +23,7 @@ export default function ImageComponent() {
   const genrateImage = async (prompt: string) => {
     try {
       console.log("sent");
-      const response = await axios.get("http://localhost:3000/api/image",
+      const response = await axios.get("/api/image",
         {
           responseType: "blob",
           params: {

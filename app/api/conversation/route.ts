@@ -15,7 +15,7 @@ export async function POST(
         const body = await req.json();
         const { messages } = body;
         const {apiKey ,apiUrl } = configuration;
-        console.log("sending request")
+        console.log("CONVERSATION : sending request")
 
 
         if(!userId){
