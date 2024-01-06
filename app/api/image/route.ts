@@ -40,9 +40,10 @@ export async function GET(
     });
 
   } catch (err) {
+    console.log("IMAGE : lafda hua hai")
     return new NextResponse("Currently Unavailaible to Respond", {
-      status: 200,
-      statusText: "OK",
+      status: 500,
+      statusText: "ERROR",
       headers: {
         "Content-Type": "text/json",
       },
