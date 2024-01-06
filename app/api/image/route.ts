@@ -9,7 +9,7 @@ export async function GET(
   req: NextRequest
 ) {
   try {
-
+    console.log("IMAGE : Request Recived")
     const prompt = req.nextUrl.searchParams.get("prompt") ;
 
     if (!prompt) {
@@ -29,6 +29,7 @@ export async function GET(
         negative_prompt: 'realistic, Natural, 8k',
       }
     })
+    console.log("IMAGE : Request full-filled")
 
     return new NextResponse(response, {
       status: 200,
