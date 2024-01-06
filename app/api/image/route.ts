@@ -1,8 +1,9 @@
 // pages/api/image.ts
 import { HfInference } from '@huggingface/inference'
 import { NextRequest, NextResponse } from 'next/server';
+const token = process.env.HUGGING_FACE_ACCESS_TOKEN;
 
-const hf = new HfInference('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');
+const hf = new HfInference(token);
 
 export async function GET(
   req: NextRequest

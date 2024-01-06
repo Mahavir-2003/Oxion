@@ -68,10 +68,10 @@ export default function ImageComponent() {
       <div className='scrollable-view flex-1 overflow-auto max-h-[80vh] lg:w-[80%] w-full flex flex-col gap-y-10 py-6'>
         {
           imageUrls.map((url)=>(
-            <div className='w-full'>
+            <div className='w-full' key={url.imgUrl as string}>
             <div className=' text-xl text-[#fff] mb-2 '>{url.prompt}</div>
             <div className='w-[300px] h-[300px] relative'>
-              <Image src={url.imgUrl} alt="Genrated Image" fill={true}/>
+              <Image src={url.imgUrl as string} alt="Genrated Image" fill={true}/>
             </div>
             </div>
           ))
