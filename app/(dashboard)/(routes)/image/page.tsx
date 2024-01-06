@@ -48,28 +48,6 @@ const fetchImage = async (prompt : string)=> {
   
 }
 
-  const genrateImage = async (prompt: string) => {
-    try {
-      console.log("sent");
-      const response = await axios.get("/api/image",
-        {
-          responseType: "blob",
-          params: {
-            prompt: prompt
-          }
-        });
-      console.log("Received");
-      const blob = new Blob([response.data], { type: "image/jpeg" });
-      console.log(blob);
-      const url = URL.createObjectURL(blob);
-      console.log(url);
-      return url;
-    } catch (error) {
-      console.error('Error fetching the image', error);
-      return "";
-    }
-  };
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

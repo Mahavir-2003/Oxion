@@ -15,6 +15,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 
+const configuration = {
+  apiKey : "pk-JEgBEKUlzgrBJjVhzbffxvhhydKfnrIwNIMUMIWVCgMlUOzz",
+  apiUrl : 'https://api.pawan.krd/v1/chat/completions',
+}
 
 type ChatCompletionRequestMessage = {
   role: 'system' | "user" | "assistant",
@@ -42,6 +46,7 @@ const ConversationPage = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Submitted");
     try {
+      const {apiKey ,apiUrl } = configuration;
       await setIsThinking(true);
       // creating ChatCompletionRequestMessage object of user prompt
       const userMessage: ChatCompletionRequestMessage = {
@@ -53,13 +58,32 @@ const ConversationPage = () => {
       await setMessages(newMessages); // wait for the state to update
       form.reset();
 
-      const response = await axios.post("/api/conversation", {
-        messages: newMessages, // send the updated messages array
-      });
-      console.log(response.data);
+      const headers = {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      };
+      console.log("request sent");
+      const response = await axios.post(apiUrl, {
+        "model": "pai-001-light",
+        "max_tokens": 3000,
+        "messages": [
+            ...messages
+        ]
+    }, { headers });
+    
+    console.log("Responce Recived",response);
+
+    if(!response.data.choices[0].message){
+      await setMessages((current) => [...current, {
+        role: 'assistant',
+        content: "Some Error Occured re-prompt please"
+      }]);
+      return;
+    }
+
       await setIsThinking(false);
       // adding response to the chat array
-      await setMessages((current) => [...current, response.data]);
+      await setMessages((current) => [...current, response.data.choices[0].message]);
       // resetting the form
       form.reset();
     } catch (err) {
