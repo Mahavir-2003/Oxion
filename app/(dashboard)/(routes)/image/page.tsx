@@ -10,6 +10,11 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Wand2Icon } from 'lucide-react'
+import { HfInference } from '@huggingface/inference'
+
+const token = process.env.HUGGING_FACE_ACCESS_TOKEN;
+
+const hf = new HfInference(token);
 
 interface ImagePrompt {
   prompt : String,
@@ -19,6 +24,29 @@ interface ImagePrompt {
 export default function ImageComponent() {
   const [imageUrls, setImageUrls] = useState<ImagePrompt[]>([]);
   const [isLoading, setIsLoading] = useState(false)
+
+const fetchImage = async (prompt : string)=> {
+
+  try{
+    const response = await hf.textToImage({
+      inputs: prompt,
+      model: 'stabilityai/stable-diffusion-xl-base-1.0',
+      parameters: {
+        negative_prompt: 'Natural',
+      }
+    })
+    console.log("Received");
+      const blob = new Blob([response], { type: "image/jpeg" });
+      console.log(blob);
+      const url = URL.createObjectURL(blob);
+      console.log(url);
+      return url;
+  }catch(err){
+    console.log("Lafda hua hehehe")
+    return "https://img.freepik.com/free-vector/page-found-concept-illustration_114360-1869.jpg"
+  }
+  
+}
 
   const genrateImage = async (prompt: string) => {
     try {
@@ -53,7 +81,7 @@ export default function ImageComponent() {
     console.log("Submitted");
     try {
       setIsLoading(true);
-      const url = await genrateImage(values.prompt)
+      const url = await fetchImage(values.prompt)
       await setImageUrls((prev)=> [...prev , { prompt : values.prompt , imgUrl : url}])
     } catch (err) {
       console.error('Error fetching the image', err);

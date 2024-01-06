@@ -26,7 +26,7 @@ export async function GET(
       inputs: prompt,
       model: 'stabilityai/stable-diffusion-xl-base-1.0',
       parameters: {
-        negative_prompt: 'realistic, Natural, 8k',
+        negative_prompt: 'Natural',
       }
     })
     console.log("IMAGE : Request full-filled")
