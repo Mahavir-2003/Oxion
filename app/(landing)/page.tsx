@@ -6,7 +6,7 @@ const LandingPage
  = () => {
   return (
     <div>
-      <Link href="/sign-in">
+      <Link href="/dashboard">
       <Button variant="secondary">Go to Dashboard</Button>
       </Link>
     </div>
