@@ -7,10 +7,7 @@ const LandingPage
   return (
     <div>
       <Link href="/sign-in">
-      <Button>Login</Button>
-      </Link>
-      <Link href="/sign-up">
-      <Button>Register</Button>
+      <Button variant="secondary">Go to Dashboard</Button>
       </Link>
     </div>
   )
