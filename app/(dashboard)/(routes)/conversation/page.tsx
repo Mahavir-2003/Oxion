@@ -15,8 +15,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 
+
 const configuration = {
-  apiKey : "pk-JEgBEKUlzgrBJjVhzbffxvhhydKfnrIwNIMUMIWVCgMlUOzz",
+  apiKey : process.env.NEXT_PUBLIC_CHAT_COMPLETION_PAWAN_API_KEY,
   apiUrl : 'https://api.pawan.krd/v1/chat/completions',
 }
 
@@ -40,67 +41,59 @@ const ConversationPage = () => {
     }
   });
 
-  const isLoading = form.formState.isSubmitting;
-
-
+  
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Submitted");
+    console.log('Submitted');
     try {
-      const {apiKey ,apiUrl } = configuration;
-      await setIsThinking(true);
-      // creating ChatCompletionRequestMessage object of user prompt
+      const { apiKey, apiUrl } = configuration;
+      setIsThinking(true);
+
       const userMessage: ChatCompletionRequestMessage = {
-        role: "user",
+        role: 'user',
         content: values.prompt,
       };
-      // creating ChatCompletionRequestMessage object array of user prompts
+
       const newMessages: ChatCompletionRequestMessage[] = [...messages, userMessage];
-      await setMessages(newMessages); // wait for the state to update
-      form.reset();
+      setMessages(newMessages);
 
       const headers = {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       };
-      console.log("request sent");
+
+      console.log('Request sent');
       const response = await axios.post(apiUrl, {
-        "model": "pai-001-light",
-        "max_tokens": 3000,
-        "messages": [
-            ...messages
-        ]
-    }, { headers });
-    
-    console.log("Responce Recived",response);
+        model: 'pai-001-light',
+        max_tokens: 3000,
+        messages: [...newMessages],
+      }, { headers });
 
-    if(!response.data.choices[0].message){
-      await setMessages((current) => [...current, {
-        role: 'assistant',
-        content: "Some Error Occured re-prompt please"
-      }]);
-      return;
-    }
+      console.log('Response received', response);
 
-      await setIsThinking(false);
-      // adding response to the chat array
-      await setMessages((current) => [...current, response.data.choices[0].message]);
-      // resetting the form
+      if (!response.data.choices[0]?.message) {
+        setMessages((current) => [...current, {
+          role: 'assistant',
+          content: 'Some error occurred. Please re-prompt.',
+        }]);
+        return;
+      }
+
+      setIsThinking(false);
+      setMessages((current) => [...current, response.data.choices[0].message]);
       form.reset();
     } catch (err) {
-      //TODO : Open Pro Model
-      console.log("Something Error Occurred while requesting Conversation");
-      console.log(err);
-      await setMessages((current) => [...current, {
-        role: 'assistant',
-        content: "Some Error Occured re-prompt please"
-      }]);
+      console.error('Error occurred while requesting conversation');
+      console.error(err);
 
+      setMessages((current) => [...current, {
+        role: 'assistant',
+        content: 'Some error occurred. Please re-prompt.',
+      }]);
     } finally {
       router.refresh();
-      await setIsThinking(false)
+      setIsThinking(false);
     }
   };
-
 
   return (
     <div className='flex w-full flex-col gap-y-2 justify-center items-center'>
@@ -123,7 +116,7 @@ const ConversationPage = () => {
                     </div>
                   ),
                   code: ({ node, ...props }) => (
-                    <code className=' p-1 rounded-sm bg-hoverCard' {...props} />
+                    <code className=' px-1 rounded-sm bg-hoverCard' {...props} />
                   )
                 }}
               >{message.content as string || ""}</ReactMarkdown>
@@ -139,12 +132,12 @@ const ConversationPage = () => {
             className='flex w-full  justify-between items-center'
           >
             <FormField
+              disabled={isThinking}
               name='prompt'
               render={({ field }) => (
                 <FormItem className='flex-1 '>
                   <FormControl className='p-0 pl-3 m-0'>
                     <Input
-                      disabled={isLoading}
                       autoFocus
                       autoComplete='off'
                       placeholder='How do I calculate the radius of a circle?'
@@ -158,7 +151,6 @@ const ConversationPage = () => {
             <Button
               variant="ghost"
               size="icon"
-              disabled={isLoading}
             >
               <Wand2Icon />
             </Button>

@@ -1,7 +1,6 @@
 "use client"
 import React, { useState } from 'react'
 import Image from 'next/image';
-import axios from 'axios';
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
 import { formSchema } from './constants'
@@ -12,9 +11,8 @@ import { Button } from '@/components/ui/button'
 import { Wand2Icon } from 'lucide-react'
 import { HfInference } from '@huggingface/inference'
 
-const token = process.env.HUGGING_FACE_ACCESS_TOKEN;
 
-const hf = new HfInference(token);
+const hf = new HfInference(process.env.NEXT_PUBLIC_HUGGING_FACE_ACCESS_TOKEN);
 
 interface ImagePrompt {
   prompt : String,
@@ -32,12 +30,15 @@ const fetchImage = async (prompt : string)=> {
       inputs: prompt,
       model: 'stabilityai/stable-diffusion-xl-base-1.0',
       parameters: {
-        negative_prompt: 'Natural',
+        negative_prompt: 'Worst quality, Low quality, Normal quality, Low res, Blurry, Text, Watermark, Logo, Banner, Extra digits, Cropped, JPEG artifacts, Signature, Username, Error, Sketch, Ugly, Monochrome, Horror, Geometry, Mutation, Disgusting '
       }
     })
     console.log("Received");
       const blob = new Blob([response], { type: "image/jpeg" });
       console.log(blob);
+      if(blob.size < 1000){
+        return "https://img.freepik.com/free-vector/page-found-concept-illustration_114360-1869.jpg"
+      }
       const url = URL.createObjectURL(blob);
       console.log(url);
       return url;
