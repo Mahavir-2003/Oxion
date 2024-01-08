@@ -18,6 +18,7 @@ export async function POST(req: Request) {
         const { userId } = auth();
 
         if (!userId) {
+            console.error("AUTHORIZATION ERROR : ");
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
             messages: [
                 {
                     role: 'system',
-                    content: `You are talking to a chatbot named Oxion. Oxion is a chatbot that can help you with your questions in simple and understandable manner. Oxion is developed by Mahavir Patel. Mahavir Patel is a software engineer and a student. He is currently studying at ganpat university. His Website is https://mhvr.vercel.app .`,
+                    content: `Meet Oxion, your AI buddy created by the talented Mahavir Patel. As a software engineer and student at Ganpat University, Mahavir knows his stuff. Oxion is your go-to for clear and interesting answers. Need some top-notch code? Oxion's got you covered! Check out Mahavir's cool work at https://mhvr.vercel.app. Ready to dive in? .`,
                 },
                 ...messages],
         }, { headers });
