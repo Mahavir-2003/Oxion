@@ -1,5 +1,22 @@
+// curl --location 'http://localhost:3000/api/conversation' \
+// --header 'Content-Type: application/json' \
+// --data '{
+//     "messages":[
+//         {
+//             "role": "system",
+//             "content": "You are an helpful assistant."
+//         },
+//         {
+//             "role": "user",
+//             "content": "Who are you?"
+//         }
+//     ]
+// }'
+
+
+
 "use client"
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import ReactMarkdown from "react-markdown"
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
@@ -15,16 +32,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
-
-
-const configuration = {
-  apiKey : process.env.NEXT_PUBLIC_CHAT_COMPLETION_PAWAN_API_KEY,
-  apiUrl : 'https://api.pawan.krd/v1/chat/completions',
-}
+import Link from 'next/link'
 
 type ChatCompletionRequestMessage = {
   role: 'system' | "user" | "assistant",
-  content: String,
+  content: string,
 }
 
 const ConversationPage = () => {
@@ -42,11 +54,10 @@ const ConversationPage = () => {
     }
   });
 
-  
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log('Submitted');
     try {
-      const { apiKey, apiUrl } = configuration;
       setIsThinking(true);
 
       const userMessage: ChatCompletionRequestMessage = {
@@ -55,43 +66,34 @@ const ConversationPage = () => {
       };
 
       const newMessages: ChatCompletionRequestMessage[] = [...messages, userMessage];
-      setMessages(newMessages);
+      await setMessages(newMessages);
 
-      const headers = {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+
+      const response = await axios.post('/api/conversation', {
+        messages: newMessages,
+      });
+
+      console.log("Response from server", response.data.content)
+
+      const assistantMessage: ChatCompletionRequestMessage = {
+        role: response.data.role,
+        content: response.data.content,
       };
 
-      console.log('Request sent');
-      const response = await axios.post(apiUrl, {
-        model: 'pai-001-light',
-        max_tokens: 3000,
-        messages: [...newMessages],
-      }, { headers });
-
-      console.log('Response received', response);
-
-      if (!response.data.choices[0]?.message) {
-        setMessages((current) => [...current, {
-          role: 'assistant',
-          content: 'Some error occurred. Please re-prompt.',
-        }]);
-        return;
-      }
-
       setIsThinking(false);
-      setMessages((current) => [...current, response.data.choices[0].message]);
-      form.reset();
+      setMessages((current) => [...current, assistantMessage]);
+
     } catch (err) {
       console.error('Error occurred while requesting conversation');
       console.error(err);
 
       setMessages((current) => [...current, {
         role: 'assistant',
-        content: 'Some error occurred. Please re-prompt.',
+        content: 'An error occurred while requesting conversation, please try again later.'
       }]);
+
     } finally {
-      router.refresh();
+      form.reset();
       setIsThinking(false);
     }
   };
@@ -111,6 +113,9 @@ const ConversationPage = () => {
               <p className=' text-lg font-bold tracking-wide '>{message.role === "user" ? "You" : "Oxion"}</p>
               <ReactMarkdown
                 components={{
+                  a: ({ node, ...props }) => (
+                    <div>HEHEH : {props.href}</div>
+                  ),
                   pre: ({ node, ...props }) => (
                     <div className='bg-card_background p-4 overflow-auto lg:w-2/3 w-full rounded-md border border-typography/10 my-4'>
                       <pre {...props} />
@@ -124,11 +129,11 @@ const ConversationPage = () => {
             </div>
           </div>
         ))}
-        <div className={cn(isThinking ? "flex" : "hidden","w-full gap-x-3 opacity-30")}>
+        <div className={cn(isThinking ? "flex" : "hidden", "w-full gap-x-3 opacity-30")}>
           <Skeleton className=' w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full' />
           <div className='flex flex-col w-full gap-y-2 mt-1'>
-            <Skeleton className='w-1/5 h-4'/>
-            <Skeleton className='w-full h-20'/>
+            <Skeleton className='w-1/5 h-4' />
+            <Skeleton className='w-full h-20' />
           </div>
         </div>
       </div>

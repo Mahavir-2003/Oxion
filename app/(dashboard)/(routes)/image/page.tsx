@@ -12,43 +12,41 @@ import { Wand2Icon } from 'lucide-react'
 import { HfInference } from '@huggingface/inference'
 import { Skeleton } from '@/components/ui/skeleton';
 
-
 const hf = new HfInference(process.env.NEXT_PUBLIC_HUGGING_FACE_ACCESS_TOKEN);
 
 interface ImagePrompt {
-  prompt : String,
-  imgUrl : String
+  prompt : string,
+  imgUrl : string
 }
 
 export default function ImageComponent() {
   const [imageUrls, setImageUrls] = useState<ImagePrompt[]>([]);
   const [isLoading, setIsLoading] = useState(false)
 
-const fetchImage = async (prompt : string)=> {
+  const fetchImage = async (prompt : string) => {
+    try {
+      const response = await hf.textToImage({
+        inputs: prompt,
+        model: 'stablediffusionapi/juggernaut-xl-v7',
+        parameters: {
+          negative_prompt: 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, naked , nsfw'
+        }
+      })
+      console.log("Image received from Hugging Face API");
 
-  try{
-    const response = await hf.textToImage({
-      inputs: prompt,
-      model: 'stablediffusionapi/juggernaut-xl-v7',
-      parameters: {
-        negative_prompt: 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, naked , nsfw'
-      }
-    })
-    console.log("Received");
       const blob = new Blob([response], { type: "image/jpeg" });
-      console.log(blob);
       if(blob.size < 1000){
+        console.log("Received blob is too small, returning error image");
         return "/Error.png"
       }
       const url = URL.createObjectURL(blob);
-      console.log(url);
+      console.log(`Image URL created: ${url}`);
       return url;
-  }catch(err){
-    console.log("Lafda hua hehehe")
-    return "/Error.png"
+    } catch(err) {
+      console.error("Error occurred while fetching image", err);
+      return "/Error.png"
+    }
   }
-  
-}
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,13 +56,14 @@ const fetchImage = async (prompt : string)=> {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Submitted");
+    console.log(`Form submitted with prompt: ${values.prompt}`);
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const url = await fetchImage(values.prompt)
-      await setImageUrls((prev)=> [...prev , { prompt : values.prompt , imgUrl : url}])
+      setImageUrls(prev => [...prev , { prompt : values.prompt , imgUrl : url}])
+      console.log("Image URL set successfully");
     } catch (err) {
-      console.error('Error fetching the image', err);
+      console.error('Error occurred while setting the image URL', err);
     } finally {
       setIsLoading(false);
       form.reset()

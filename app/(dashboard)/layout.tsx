@@ -30,7 +30,7 @@ const DashboardLayout = ({ children }: {
   }, [pathname])
 
   return (
-    <div className='p-5   h-screen relative w-full flex gap-x-3 text-typography  justify-end' >
+    <div className='p-5   h-[100dvh] relative w-full flex gap-x-3 text-typography  justify-end' >
       <div className='hidden lg:block text-typography'>
       <Sidebar />
       </div>
