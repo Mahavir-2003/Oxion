@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Wand2Icon } from 'lucide-react'
 import { HfInference } from '@huggingface/inference'
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 const hf = new HfInference(process.env.NEXT_PUBLIC_HUGGING_FACE_ACCESS_TOKEN);
@@ -28,23 +29,23 @@ const fetchImage = async (prompt : string)=> {
   try{
     const response = await hf.textToImage({
       inputs: prompt,
-      model: 'stabilityai/stable-diffusion-xl-base-1.0',
+      model: 'stablediffusionapi/juggernaut-xl-v7',
       parameters: {
-        negative_prompt: 'Worst quality, Low quality, Normal quality, Low res, Blurry, Text, Watermark, Logo, Banner, Extra digits, Cropped, JPEG artifacts, Signature, Username, Error, Sketch, Ugly, Monochrome, Horror, Geometry, Mutation, Disgusting '
+        negative_prompt: 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, naked , nsfw'
       }
     })
     console.log("Received");
       const blob = new Blob([response], { type: "image/jpeg" });
       console.log(blob);
       if(blob.size < 1000){
-        return "https://img.freepik.com/free-vector/page-found-concept-illustration_114360-1869.jpg"
+        return "/Error.png"
       }
       const url = URL.createObjectURL(blob);
       console.log(url);
       return url;
   }catch(err){
     console.log("Lafda hua hehehe")
-    return "https://img.freepik.com/free-vector/page-found-concept-illustration_114360-1869.jpg"
+    return "/Error.png"
   }
   
 }
@@ -77,12 +78,16 @@ const fetchImage = async (prompt : string)=> {
           imageUrls.map((url)=>(
             <div className='w-full' key={url.imgUrl as string}>
             <div className=' text-xl text-[#fff] mb-2 '>{url.prompt}</div>
-            <div className='w-[300px] h-[300px] relative'>
+            <div className='w-[500px] h-[500px] relative rounded-md overflow-hidden'>
               <Image src={url.imgUrl as string} alt="Genrated Image" fill={true}/>
             </div>
             </div>
           ))
         }
+        {isLoading && <div className='flex flex-col gap-y-2 opacity-30'>
+          <Skeleton className='w-2/3 h-4'/>
+          <Skeleton className='w-[500px] h-[500px]'/>
+          </div>}
       </div>
       <div className='w-full fixed-height-content bg-card_background p-2 border-[#E8E9E911] border rounded-lg'>
         <Form {...form}>
@@ -99,7 +104,7 @@ const fetchImage = async (prompt : string)=> {
                     <Input
                       autoFocus
                       autoComplete='off'
-                      placeholder='A flock of birds flying over a river at night with realistic textures.'
+                      placeholder='Joyful portrait of someone laughing in the rain, using high shutter speed to freeze raindrops.'
                       {...field}
                       className=' rounded-sm outline-0 bg-[#ffffff00] border-0 focus-visible:ring-0 focus-visible:border-0 focus-visible:ring-offset-0'
                     />
