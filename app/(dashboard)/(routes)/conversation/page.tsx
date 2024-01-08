@@ -1,20 +1,3 @@
-// curl --location 'http://localhost:3000/api/conversation' \
-// --header 'Content-Type: application/json' \
-// --data '{
-//     "messages":[
-//         {
-//             "role": "system",
-//             "content": "You are an helpful assistant."
-//         },
-//         {
-//             "role": "user",
-//             "content": "Who are you?"
-//         }
-//     ]
-// }'
-
-
-
 "use client"
 import React, { useState } from 'react'
 import ReactMarkdown from "react-markdown"
@@ -27,12 +10,10 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Wand2Icon } from 'lucide-react'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
-import Link from 'next/link'
 
 type ChatCompletionRequestMessage = {
   role: 'system' | "user" | "assistant",
@@ -42,7 +23,6 @@ type ChatCompletionRequestMessage = {
 const ConversationPage = () => {
 
   const { user } = useUser();
-  const router = useRouter();
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [isThinking, setIsThinking] = useState(false);
 
@@ -68,16 +48,14 @@ const ConversationPage = () => {
       const newMessages: ChatCompletionRequestMessage[] = [...messages, userMessage];
       await setMessages(newMessages);
 
-
-      const response = await axios.post('/api/conversation', {
+      const response = await axios.post('https://oxion-server.vercel.app/api/conversation', {
         messages: newMessages,
       });
 
-      console.log("Response from server", response.data.content)
 
       const assistantMessage: ChatCompletionRequestMessage = {
-        role: response.data.role,
-        content: response.data.content,
+        role: response.data.message.role,
+        content: response.data.message.content,
       };
 
       setIsThinking(false);
