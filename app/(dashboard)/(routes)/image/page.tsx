@@ -70,22 +70,33 @@ export default function ImageComponent() {
     }
   };
 
+  const handleDownload = ( url : string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = "Image.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <div className='flex w-full flex-col gap-y-2 justify-center items-center'>
       <div className='scrollable-view flex-1 overflow-auto max-h-[80vh] lg:w-[80%] w-full flex flex-col gap-y-10 py-6'>
         {
           imageUrls.map((url)=>(
-            <div className='w-full' key={url.imgUrl as string}>
-            <div className=' text-xl text-[#fff] mb-2 '>{url.prompt}</div>
-            <div className='w-[500px] h-[500px] relative rounded-md overflow-hidden'>
+            <div className='w-full flex flex-col justify-center gap-y-3 items-center p-4 border  border-hoverCard/20 bg-card_background rounded-md' key={url.imgUrl as string}>
+            <div className=' text-xl text-[#fff] '>{url.prompt}</div>
+            <div className='w-[300px] h-[300px] lg:w-[500px] lg:h-[500px] relative rounded-md overflow-hidden'>
               <Image src={url.imgUrl as string} alt="Genrated Image" fill={true}/>
             </div>
+            <Button className='w-[300px] lg:w-[500px] bg-yellow hover:bg-yellow/90' onClick={()=>handleDownload(url.imgUrl)} variant="secondary">Download</Button>
             </div>
           ))
         }
-        {isLoading && <div className='flex flex-col gap-y-2 opacity-30'>
-          <Skeleton className='w-2/3 h-4'/>
+        {isLoading && <div className='flex flex-col w-full justify-center items-center gap-y-2 opacity-30'>
+          <Skeleton className='w-1/3 h-4'/>
           <Skeleton className='w-[300px] h-[300px] lg:w-[500px] lg:h-[500px]'/>
+          <Skeleton className='w-[300px] h-[50px] lg:w-[500px] '/>
           </div>}
       </div>
       <div className='w-full fixed-height-content bg-card_background p-2 border-[#E8E9E911] border rounded-lg'>

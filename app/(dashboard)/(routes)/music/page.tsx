@@ -153,7 +153,7 @@ export default function ImageComponent() {
                     <Input
                       autoFocus
                       autoComplete='off'
-                      placeholder='Joyful portrait of someone laughing in the rain, using high shutter speed to freeze raindrops.'
+                      placeholder='lo-fi music with a soothing melody.'
                       {...field}
                       className=' rounded-sm outline-0 bg-[#ffffff00] border-0 focus-visible:ring-0 focus-visible:border-0 focus-visible:ring-offset-0'
                     />
