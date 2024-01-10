@@ -29,6 +29,12 @@ body{
   cursor: pointer;
 }
 
+
+audio::-webkit-media-controls-panel{
+  background-color: #ffd1471f;
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;

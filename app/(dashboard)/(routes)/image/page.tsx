@@ -27,12 +27,12 @@ export default function ImageComponent() {
     try {
       const response = await hf.textToImage({
         inputs: prompt,
-        model: 'stablediffusionapi/juggernaut-xl-v7',
+        model: 'stabilityai/stable-diffusion-xl-base-1.0',
         parameters: {
           negative_prompt: 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, naked , nsfw'
         }
       })
-      console.log("Image received from Hugging Face API");
+      console.log("Image received from Hugging Face API",response);
 
       const blob = new Blob([response], { type: "image/jpeg" });
       if(blob.size < 1000){
@@ -85,7 +85,7 @@ export default function ImageComponent() {
         }
         {isLoading && <div className='flex flex-col gap-y-2 opacity-30'>
           <Skeleton className='w-2/3 h-4'/>
-          <Skeleton className='w-[500px] h-[500px]'/>
+          <Skeleton className='w-[300px] h-[300px] lg:w-[500px] lg:h-[500px]'/>
           </div>}
       </div>
       <div className='w-full fixed-height-content bg-card_background p-2 border-[#E8E9E911] border rounded-lg'>
