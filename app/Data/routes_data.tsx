@@ -26,14 +26,6 @@ const routes =[
       info : "Welcome to the most advanced AI Image Genration",
       isDashboardVisible : true
     },{
-      label : "Video Genration",
-      icon : VideoIcon,
-      href : "/video",
-      color : "orange",
-      bgColor : "bg-orange/20",
-      info : "Welcome to the most advanced AI Video Genration",
-      isDashboardVisible : true
-    },{
       label : "Music Genration",
       icon : Music,
       href : "/music",
@@ -41,22 +33,6 @@ const routes =[
       bgColor : "bg-yellow/20",
       info : "Welcome to the most advanced AI Music Genration",
       isDashboardVisible : true
-    },{
-      label : "Code Genration",
-      icon : Code,
-      href : "/code",
-      color : "purple",
-      bgColor : "bg-purple/20",
-      info : "Welcome to the most advanced AI Code Genration",
-      isDashboardVisible : true
-    },{
-      label : "Settings",
-      icon : Settings,
-      href : "/settings",
-      color : "white",
-      bgColor : "bg-white/20",
-      info : "Welcome to the Settings",
-      isDashboardVisible : false
     }
   ]
 

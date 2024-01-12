@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, useUser } from '@clerk/nextjs'
 import { Montserrat } from 'next/font/google'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
@@ -14,7 +14,7 @@ const montserrat = Montserrat({
   })
 
 const Sidebar = () => {
-
+    const User = useUser();
     const pathname = usePathname();
 
   return (
@@ -44,8 +44,8 @@ const Sidebar = () => {
           <div className='p-3 py-5 px-3 flex gap-x-4 justify-start items-center'>
               <UserButton afterSignOutUrl='/'/>
               <div>
-                <p className='text-lg tracking-wide leading-6 font-medium'>Mahavir Patel</p>
-                <p className=' text-green tracking-wide'>Premium</p>
+                <p className='text-lg tracking-wide leading-6 font-medium'>{User.user?.firstName} {User.user?.lastName}</p>
+                <p className=' text-green tracking-wide'>Standard</p>
               </div>
           </div>
       </nav>
