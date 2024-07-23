@@ -13,8 +13,7 @@
 
 ## Technologies Used
 
-- **Frontend**: HTML, CSS, JavaScript (React)
-- **Backend**: Node.js, Express
+- Next.js
 - **AI Models**: 
   - Stable Diffusion (stable-diffusion-xl-base-1.0)
   - GPT-4 equivalent (GPT 4o)
